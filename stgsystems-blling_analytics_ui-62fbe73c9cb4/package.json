@@ -1,0 +1,24 @@
+{
+  "name": "webapp",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && cp -r public/static dist/ 2>/dev/null || true",
+    "build:tomcat": "node scripts/build-tomcat.mjs",
+    "preview": "wrangler pages dev",
+    "deploy": "npm run build && wrangler pages deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:init": "wrangler d1 execute cellpay-production --local --file=./migrations/0001_initial_schema.sql",
+    "db:seed": "wrangler d1 execute cellpay-production --local --file=./seed.sql",
+    "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:init && npm run db:seed"
+  },
+  "dependencies": {
+    "hono": "^4.11.8"
+  },
+  "devDependencies": {
+    "@hono/vite-build": "^1.2.0",
+    "@hono/vite-dev-server": "^0.18.2",
+    "vite": "^6.3.5",
+    "wrangler": "^4.4.0"
+  }
+}
